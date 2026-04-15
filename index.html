@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DLM-SHOP</title>
+  <style>
+    :root{--accent:#6a0dad;--sub:#00d2ff;--glow:rgba(0,210,255,.45);--bg:#020208;--line:rgba(255,255,255,.08);--text:#fff;--muted:rgba(255,255,255,.65)}
+    *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top, rgba(106,13,173,.18), transparent 35%), linear-gradient(180deg,#020208 0%,#060610 100%);color:var(--text)}
+    header{background:rgba(2,2,8,.72);backdrop-filter:blur(18px);padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center;position:sticky;top:0;z-index:10}
+    h1{margin:0;font-size:2.3rem;letter-spacing:6px;text-transform:uppercase;background:linear-gradient(135deg,#fff 0%,var(--sub) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    main{max-width:1180px;margin:auto;padding:34px 20px 56px}
+    .hero{text-align:center;padding:18px 20px 34px}
+    .hero .eyebrow{font-size:.8rem;letter-spacing:6px;text-transform:uppercase;color:var(--sub);opacity:.8;margin-bottom:10px}
+    .nav-grid{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+    .nav-btn{display:block;text-decoration:none;color:#000;background:var(--sub);padding:16px 18px;border-radius:16px;font-weight:900;text-transform:uppercase;letter-spacing:2px;text-align:center;transition:.2s;box-shadow:0 0 18px var(--glow);cursor:pointer;border:none}
+    .nav-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+    .section{display:none;margin-bottom:54px}
+    .section.active{display:block}
+    h2{font-size:1.7rem;margin:0 0 22px;text-align:center;letter-spacing:4px;text-transform:uppercase;color:var(--sub)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center;box-shadow:0 0 24px rgba(0,0,0,.22)}
+    .card img{width:100%;height:240px;object-fit:contain;background:#fff;border-radius:16px;margin-bottom:16px;display:block}
+    .card h3{margin:0 0 10px;font-size:1.2rem;letter-spacing:1px;text-transform:uppercase}
+    .card p{color:var(--muted);line-height:1.7;margin:0 0 16px;font-size:.95rem}
+    .price{font-size:1.8rem;font-weight:900;color:var(--sub);margin-bottom:16px;text-shadow:0 0 12px var(--glow)}
+    .btn{padding:12px 24px;border-radius:14px;background:var(--sub);border:none;color:#000;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;font-size:.9rem}
+    .selector-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+    .mini-btn{padding:8px 12px;border-radius:999px;border:1px solid rgba(0,210,255,.35);background:rgba(255,255,255,.04);color:#fff;font-size:.75rem;font-weight:800;text-transform:uppercase;cursor:pointer}
+    .mini-btn.active{background:var(--sub);color:#000;border-color:var(--sub)}
+    footer{padding:28px 20px 40px;text-align:center;color:rgba(255,255,255,.28);border-top:1px solid rgba(255,255,255,.05);letter-spacing:3px;text-transform:uppercase;font-size:.75rem}
+    @media (max-width:640px){h1{font-size:1.8rem;letter-spacing:3px}.grid{grid-template-columns:1fr}.card img{height:220px}.nav-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header><h1>DLM-Corp</h1></header>
+  <main>
+    <section class="hero"><div class="eyebrow">DLM-SHOP</div></section>
+    <section class="nav-grid">
+      <button class="nav-btn" onclick="showSection('mugs')">Mugs</button>
+      <button class="nav-btn" onclick="showSection('coussins')">Coussins</button>
+      <button class="nav-btn" onclick="showSection('magnets')">Magnets</button>
+    </section>
+
+    <section class="section active" id="mugs">
+      <h2>Tasses</h2>
+      <div class="grid">
+        <article class="card">
+          <img id="mugImage" src="attachment://image.jpg" alt="Tasse" />
+          <h3 id="mugTitle">Mug classique</h3>
+          <p>Photo de présentation du produit.</p>
+          <div class="selector-row" id="typeRow">
+            <button class="mini-btn active" data-type="classique" onclick="setMugType(this)">Mug classique</button>
+            <button class="mini-btn" data-type="deux-couleurs" onclick="setMugType(this)">Tasse à deux couleurs</button>
+            <button class="mini-btn" data-type="verre-glace" onclick="setMugType(this)">Tasse en verre glacé</button>
+            <button class="mini-btn" data-type="voyage-travail" onclick="setMugType(this)">Tasse pour voyage/travail</button>
+          </div>
+          <div class="selector-row" id="sizeRow">
+            <button class="mini-btn active" data-size="325" onclick="setMugSize(this)">325 ml</button>
+            <button class="mini-btn" data-size="444" onclick="setMugSize(this)">444 ml</button>
+          </div>
+          <div class="price" id="mugPrice">19 €</div>
+          <button class="btn">Commander</button>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="coussins">
+      <h2>Coussins</h2>
+      <div class="grid">
+        <article class="card"><img src="attachment://image.jpg" alt="Coussin 40,6 cm x 40,6 cm" /><h3>Coussin 40,6 cm x 40,6 cm</h3><p>Photo de présentation du produit.</p><div class="price">50 €</div><button class="btn">Commander</button></article>
+      </div>
+    </section>
+
+    <section class="section" id="magnets">
+      <h2>Magnets</h2>
+      <div class="grid">
+        <article class="card">
+          <img id="magnetImage" src="attachment://image.jpg" alt="Magnet rond" />
+          <h3 id="magnetTitle">Magnet rond</h3>
+          <p>Photo de présentation du produit.</p>
+          <div class="selector-row" id="magnetTypeRow">
+            <button class="mini-btn active" data-magnet="rond" onclick="setMagnetType(this)">Rond</button>
+            <button class="mini-btn" data-magnet="carre" onclick="setMagnetType(this)">Carré</button>
+            <button class="mini-btn" data-magnet="rectangle" onclick="setMagnetType(this)">Rectangle</button>
+          </div>
+          <div class="selector-row" id="magnetSizeRow">
+            <button class="mini-btn active" data-size="rond" onclick="setMagnetSize(this)">5,7 cm</button>
+          </div>
+          <div class="price" id="magnetPrice">6 €</div>
+          <button class="btn">Commander</button>
+        </article>
+      </div>
+    </section>
+  </main>
+  <script>
+    const mugPrices = {
+      classique: {325: 19, 444: 20},
+      'deux-couleurs': {325: 20, 444: 23},
+      'verre-glace': {296: 24, 473: 30},
+      'voyage-travail': {444: 25}
+    };
+    const mugTitles = {
+      classique: 'Mug classique',
+      'deux-couleurs': 'Tasse à deux couleurs',
+      'verre-glace': 'Tasse en verre glacé',
+      'voyage-travail': 'Tasse pour voyage/travail'
+    };
+    const magnetData = {
+      rond: {label: 'Magnet rond', size: '5,7 cm', price: '6 €', img: 'attachment://image.jpg'},
+      carre: {label: 'Magnet carré', size: '5,1 cm', price: '6,50 €', img: 'attachment://image.jpg'},
+      rectangle: {label: 'Magnet rectangle', size: '8,89 cm x 6,35 cm', price: '7 €', img: 'attachment://image-2.jpg'}
+    };
+    let currentType='classique';
+    let currentSize='325';
+    let currentMagnet='rond';
+    function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});}
+    function renderMug(){
+      document.getElementById('mugTitle').textContent = mugTitles[currentType];
+      const opts = mugPrices[currentType];
+      const sizeRow = document.getElementById('sizeRow');
+      sizeRow.innerHTML = '';
+      Object.keys(opts).forEach(size=>{
+        const b = document.createElement('button');
+        b.className = 'mini-btn' + (size===currentSize ? ' active' : '');
+        b.textContent = size + ' ml';
+        b.onclick = () => { currentSize = size; renderMug(); };
+        b.dataset.size = size;
+        sizeRow.appendChild(b);
+      });
+      if(!opts[currentSize]) currentSize = Object.keys(opts)[0];
+      document.getElementById('mugPrice').textContent = opts[currentSize] + ' €';
+      document.querySelectorAll('#typeRow .mini-btn').forEach(b=>b.classList.toggle('active', b.dataset.type===currentType));
+      document.querySelectorAll('#sizeRow .mini-btn').forEach(b=>b.classList.toggle('active', b.dataset.size===currentSize));
+    }
+    function setMugType(btn){ currentType = btn.dataset.type; currentSize = Object.keys(mugPrices[currentType])[0]; renderMug(); }
+    function setMugSize(btn){ currentSize = btn.dataset.size; renderMug(); }
+    function renderMagnet(){
+      const d = magnetData[currentMagnet];
+      document.getElementById('magnetTitle').textContent = d.label;
+      document.getElementById('magnetPrice').textContent = d.price;
+      document.getElementById('magnetImage').src = d.img;
+      const sizeRow = document.getElementById('magnetSizeRow');
+      sizeRow.innerHTML = '';
+      const b = document.createElement('button');
+      b.className = 'mini-btn active';
+      b.textContent = d.size;
+      b.onclick = () => {};
+      sizeRow.appendChild(b);
+      document.querySelectorAll('#magnetTypeRow .mini-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.magnet===currentMagnet));
+    }
+    function setMagnetType(btn){ currentMagnet = btn.dataset.magnet; renderMagnet(); }
+    function setMagnetSize(btn){}
+    renderMug();
+    renderMagnet();
+  </script>
+</body>
+</html>
