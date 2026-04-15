@@ -100,12 +100,8 @@
   <div id="toastMsg" class="toast"></div>
 
   <script>
-    // ========== CONFIGURATION ==========
-    // 🔽 REMPLACEZ CETTE URL PAR VOTRE WEBHOOK DISCORD 🔽
     const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/TA_DISCORD_WEBHOOK_ID/TA_TOKEN";
-    // Si vous ne voulez pas utiliser Discord, commentez l'envoi et utilisez console.log / localStorage
 
-    // ========== DONNÉES PRODUITS ==========
     const mugPrices = {
       classique: {325: 19, 444: 20},
       'deux-couleurs': {325: 20, 444: 23},
@@ -127,7 +123,6 @@
     let currentSize = '325';
     let currentMagnet = 'rond';
 
-    // ========== RENDU DES VARIANTES ==========
     function renderMug() {
       document.getElementById('mugTitle').textContent = mugTitles[currentType];
       const opts = mugPrices[currentType];
@@ -163,7 +158,6 @@
     renderMug();
     renderMagnet();
 
-    // ========== FONCTIONS DE COMMANDE ==========
     function showToast(message, isError = false) {
       const toast = document.getElementById('toastMsg');
       toast.textContent = message;
@@ -174,18 +168,16 @@
       setTimeout(() => { toast.style.display = 'none'; }, 4000);
     }
 
-    // Enregistrement local (historique client)
     function saveOrderLocally(order) {
       let orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
-      orders.unshift(order); // récent en premier
+      orders.unshift(order);
       if (orders.length > 50) orders.pop();
       localStorage.setItem('dlm_shop_orders', JSON.stringify(orders));
     }
 
-    // Envoi vers Discord (webhook)
     async function sendToDiscord(order) {
-      if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "https://discord.com/api/webhooks/TA_DISCORD_WEBHOOK_ID/TA_TOKEN") {
-        console.warn("⚠️ Webhook Discord non configuré, commande enregistrée localement uniquement.");
+      if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR") {
+        console.warn("Webhook Discord non configuré");
         return false;
       }
       try {
@@ -207,15 +199,13 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ embeds: [embed] })
         });
-        if (response.ok) return true;
-        else throw new Error(`HTTP ${response.status}`);
+        return response.ok;
       } catch (err) {
-        console.error("Erreur envoi Discord:", err);
+        console.error(err);
         return false;
       }
     }
 
-    // Commande générique
     async function processOrder(productName, variant, price, extra = {}) {
       const now = new Date();
       const order = {
@@ -227,20 +217,16 @@
         timestamp: now.getTime(),
         ...extra
       };
-      // Enregistrement local
       saveOrderLocally(order);
-      // Envoi Discord
       const sent = await sendToDiscord(order);
       if (sent) {
         showToast(`✅ Commande enregistrée ! Ref: ${order.ref} (envoyée au staff)`);
       } else {
         showToast(`📦 Commande enregistrée localement (ref: ${order.ref})`, false);
       }
-      // Optionnel : afficher dans console pour débogage
       console.log("Commande:", order);
     }
 
-    // Commandes spécifiques
     function commanderMug() {
       const price = mugPrices[currentType][currentSize];
       const variant = `${mugTitles[currentType]} · ${currentSize} ml`;
@@ -255,17 +241,15 @@
       processOrder("Magnet", variant, magnet.price, { magnet_type: currentMagnet });
     }
 
-    // Navigation entre sections
     function showSection(id) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    // Petit ajout : si la fenêtre est rechargée, afficher le nombre de commandes locales (optionnel)
     window.addEventListener('load', () => {
       const orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
-      if (orders.length) console.log(`📦 ${orders.length} commande(s) enregistrée(s) localement`);
+      if (orders.length) console.log(`${orders.length} commande(s) locale(s)`);
     });
   </script>
 </body>
