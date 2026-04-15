@@ -3,250 +3,341 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DLM-SHOP · Commandes</title>
+  <title>DLM-SHOP · Panier & Commandes</title>
   <style>
     :root{--accent:#6a0dad;--sub:#00d2ff;--glow:rgba(0,210,255,.45);--bg:#020208;--line:rgba(255,255,255,.08);--text:#fff;--muted:rgba(255,255,255,.65)}
     *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top, rgba(106,13,173,.18), transparent 35%), linear-gradient(180deg,#020208 0%,#060610 100%);color:var(--text)}
     header{background:rgba(2,2,8,.72);backdrop-filter:blur(18px);padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);text-align:center;position:sticky;top:0;z-index:10}
     h1{margin:0;font-size:2.3rem;letter-spacing:6px;text-transform:uppercase;background:linear-gradient(135deg,#fff 0%,var(--sub) 50%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    main{max-width:1180px;margin:auto;padding:34px 20px 56px}
+    main{max-width:1280px;margin:auto;padding:34px 20px 56px}
     .hero{text-align:center;padding:18px 20px 34px}
     .hero .eyebrow{font-size:.8rem;letter-spacing:6px;text-transform:uppercase;color:var(--sub);opacity:.8;margin-bottom:10px}
-    .nav-grid{display:grid;grid-template-columns:repeat(3,minmax(180px,1fr));gap:14px;margin-bottom:24px}
-    .nav-btn{display:block;text-decoration:none;color:#000;background:var(--sub);padding:16px 18px;border-radius:16px;font-weight:900;text-transform:uppercase;letter-spacing:2px;text-align:center;transition:.2s;box-shadow:0 0 18px var(--glow);cursor:pointer;border:none}
-    .nav-btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-    .section{display:none;margin-bottom:54px}
+    .flex-row{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+    .shop-section{flex:2;min-width:260px}
+    .cart-section{flex:1.2;min-width:280px;position:sticky;top:90px}
+    .cart-card{background:rgba(0,0,0,.55);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:28px;padding:20px}
+    .cart-title{font-size:1.3rem;font-weight:800;margin:0 0 16px;text-align:center;color:var(--sub)}
+    .cart-item{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);padding:10px 0;font-size:.85rem}
+    .cart-item-info{flex:1}
+    .cart-item-name{font-weight:800}
+    .cart-item-price{color:var(--sub)}
+    .cart-item-actions{display:flex;gap:6px;align-items:center}
+    .cart-qty-btn{background:rgba(255,255,255,.1);border:none;color:white;width:26px;height:26px;border-radius:8px;cursor:pointer}
+    .cart-remove{background:rgba(255,75,43,.2);border:none;color:#ff6b4a;border-radius:8px;padding:4px 8px;cursor:pointer;font-size:.7rem}
+    .cart-total{font-size:1.2rem;font-weight:900;text-align:right;margin:16px 0 12px;padding-top:12px;border-top:1px solid var(--line)}
+    .cart-empty{text-align:center;padding:24px;color:var(--muted);font-style:italic}
+    .validate-btn{background:var(--sub);color:#000;border:none;width:100%;padding:14px;border-radius:24px;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;margin-top:12px}
+    .validate-btn:disabled{opacity:.5;cursor:not-allowed}
+    .nav-grid{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:14px;margin-bottom:24px}
+    .nav-btn{background:var(--sub);padding:12px;border-radius:16px;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;border:none;color:#000}
+    .section{display:none}
     .section.active{display:block}
-    h2{font-size:1.7rem;margin:0 0 22px;text-align:center;letter-spacing:4px;text-transform:uppercase;color:var(--sub)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
-    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center;box-shadow:0 0 24px rgba(0,0,0,.22)}
-    .card img{width:100%;height:240px;object-fit:contain;background:#fff;border-radius:16px;margin-bottom:16px;display:block}
-    .card h3{margin:0 0 10px;font-size:1.2rem;letter-spacing:1px;text-transform:uppercase}
-    .card p{color:var(--muted);line-height:1.7;margin:0 0 16px;font-size:.95rem}
-    .price{font-size:1.8rem;font-weight:900;color:var(--sub);margin-bottom:16px;text-shadow:0 0 12px var(--glow)}
-    .btn{padding:12px 24px;border-radius:14px;background:var(--sub);border:none;color:#000;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;font-size:.9rem;transition:.2s}
-    .btn:hover{transform:scale(1.02);filter:brightness(1.1)}
-    .selector-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
-    .mini-btn{padding:8px 12px;border-radius:999px;border:1px solid rgba(0,210,255,.35);background:rgba(255,255,255,.04);color:#fff;font-size:.75rem;font-weight:800;text-transform:uppercase;cursor:pointer}
-    .mini-btn.active{background:var(--sub);color:#000;border-color:var(--sub)}
-    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#000;color:var(--sub);border:1px solid var(--sub);padding:10px 24px;border-radius:50px;font-family:monospace;font-weight:800;font-size:.85rem;z-index:1000;display:none;backdrop-filter:blur(12px);white-space:nowrap}
-    footer{padding:28px 20px 40px;text-align:center;color:rgba(255,255,255,.28);border-top:1px solid rgba(255,255,255,.05);letter-spacing:3px;text-transform:uppercase;font-size:.75rem}
-    @media (max-width:640px){h1{font-size:1.8rem;letter-spacing:3px}.grid{grid-template-columns:1fr}.card img{height:220px}.nav-grid{grid-template-columns:1fr}.toast{white-space:normal;width:80%;text-align:center}}
+    h2{font-size:1.7rem;margin:0 0 22px;text-align:center;letter-spacing:4px;color:var(--sub)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center}
+    .card img{width:100%;height:200px;object-fit:contain;background:#fff;border-radius:16px;margin-bottom:16px}
+    .card h3{margin:0 0 10px;font-size:1.1rem}
+    .card p{color:var(--muted);font-size:.85rem}
+    .price{font-size:1.6rem;font-weight:900;color:var(--sub);margin:12px 0}
+    .add-btn{padding:10px 18px;background:var(--sub);border:none;border-radius:40px;font-weight:800;cursor:pointer;width:100%}
+    .selector-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+    .mini-btn{padding:6px 12px;border-radius:40px;border:1px solid rgba(0,210,255,.4);background:rgba(255,255,255,.05);color:#fff;font-size:.7rem;cursor:pointer}
+    .mini-btn.active{background:var(--sub);color:#000}
+    .discord-input-area{background:rgba(0,0,0,.5);border-radius:20px;padding:12px 18px;margin-bottom:20px}
+    .discord-input-area label{display:block;font-size:.8rem;margin-bottom:6px;color:var(--sub)}
+    .discord-input-area input{width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.6);color:white}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#000;color:var(--sub);border:1px solid var(--sub);padding:10px 24px;border-radius:50px;z-index:1000;display:none}
+    footer{padding:28px;text-align:center;color:rgba(255,255,255,.28);border-top:1px solid rgba(255,255,255,.05)}
+    @media (max-width:800px){.flex-row{flex-direction:column}.cart-section{position:static}}
   </style>
 </head>
 <body>
-  <header><h1>DLM-Corp</h1></header>
-  <main>
-    <section class="hero"><div class="eyebrow">DLM-SHOP</div></section>
-    <section class="nav-grid">
-      <button class="nav-btn" onclick="showSection('mugs')">Mugs</button>
-      <button class="nav-btn" onclick="showSection('coussins')">Coussins</button>
-      <button class="nav-btn" onclick="showSection('magnets')">Magnets</button>
-    </section>
-
-    <section class="section active" id="mugs">
-      <h2>Tasses</h2>
-      <div class="grid">
-        <article class="card">
-          <img id="mugImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EMug%3C/text%3E%3C/svg%3E" alt="Tasse" />
-          <h3 id="mugTitle">Mug classique</h3>
-          <p>Tasse personnalisable, haute qualité.</p>
-          <div class="selector-row" id="typeRow">
-            <button class="mini-btn active" data-type="classique" onclick="setMugType(this)">Mug classique</button>
-            <button class="mini-btn" data-type="deux-couleurs" onclick="setMugType(this)">Tasse à deux couleurs</button>
-            <button class="mini-btn" data-type="verre-glace" onclick="setMugType(this)">Tasse en verre glacé</button>
-            <button class="mini-btn" data-type="voyage-travail" onclick="setMugType(this)">Tasse pour voyage/travail</button>
-          </div>
-          <div class="selector-row" id="sizeRow"></div>
-          <div class="price" id="mugPrice">19 €</div>
-          <button class="btn" onclick="commanderMug()">Commander</button>
-        </article>
+<header><h1>DLM-Corp</h1></header>
+<main>
+  <div class="hero"><div class="eyebrow">DLM-SHOP · Panier groupé</div></div>
+  <div class="discord-input-area">
+    <label>🔐 Votre pseudo Discord (obligatoire)</label>
+    <input type="text" id="discordUsername" placeholder="Ex: pierre#1234 ou pierre" autocomplete="off">
+  </div>
+  <div class="flex-row">
+    <div class="shop-section">
+      <div class="nav-grid">
+        <button class="nav-btn" onclick="showSection('mugs')">Mugs</button>
+        <button class="nav-btn" onclick="showSection('coussins')">Coussins</button>
+        <button class="nav-btn" onclick="showSection('magnets')">Magnets</button>
       </div>
-    </section>
-
-    <section class="section" id="coussins">
-      <h2>Coussins</h2>
-      <div class="grid">
-        <article class="card">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ECoussin%3C/text%3E%3C/svg%3E" alt="Coussin 40,6 cm x 40,6 cm" />
-          <h3>Coussin 40,6 cm x 40,6 cm</h3>
-          <p>Coussin carré moelleux, impression recto-verso.</p>
-          <div class="price">50 €</div>
-          <button class="btn" onclick="commanderCoussin()">Commander</button>
-        </article>
+      <section class="section active" id="mugs">
+        <h2>Tasses</h2>
+        <div class="grid" id="mugsGrid"></div>
+      </section>
+      <section class="section" id="coussins">
+        <h2>Coussins</h2>
+        <div class="grid" id="coussinsGrid"></div>
+      </section>
+      <section class="section" id="magnets">
+        <h2>Magnets</h2>
+        <div class="grid" id="magnetsGrid"></div>
+      </section>
+    </div>
+    <div class="cart-section">
+      <div class="cart-card">
+        <div class="cart-title">🛒 Mon panier</div>
+        <div id="cartItemsList"></div>
+        <div id="cartTotal" class="cart-total">Total : 0 €</div>
+        <button id="validateOrderBtn" class="validate-btn">✅ Valider la commande</button>
       </div>
-    </section>
+    </div>
+  </div>
+</main>
+<footer>DLM-SHOP · Paiement à la livraison · Commandes groupées</footer>
+<div id="toastMsg" class="toast"></div>
 
-    <section class="section" id="magnets">
-      <h2>Magnets</h2>
-      <div class="grid">
-        <article class="card">
-          <img id="magnetImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3EMagnet%3C/text%3E%3C/svg%3E" alt="Magnet rond" />
-          <h3 id="magnetTitle">Magnet rond</h3>
-          <p>Magnétique, finition brillante.</p>
-          <div class="selector-row" id="magnetTypeRow">
-            <button class="mini-btn active" data-magnet="rond" onclick="setMagnetType(this)">Rond</button>
-            <button class="mini-btn" data-magnet="carre" onclick="setMagnetType(this)">Carré</button>
-            <button class="mini-btn" data-magnet="rectangle" onclick="setMagnetType(this)">Rectangle</button>
-          </div>
-          <div class="selector-row" id="magnetSizeRow"></div>
-          <div class="price" id="magnetPrice">6 €</div>
-          <button class="btn" onclick="commanderMagnet()">Commander</button>
-        </article>
-      </div>
-    </section>
-  </main>
-  <footer>DLM-SHOP · Commandes sécurisées</footer>
-  <div id="toastMsg" class="toast"></div>
+<script>
+  const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR";
 
-  <script>
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR";
-
-    const mugPrices = {
-      classique: {325: 19, 444: 20},
-      'deux-couleurs': {325: 20, 444: 23},
-      'verre-glace': {296: 24, 473: 30},
-      'voyage-travail': {444: 25}
-    };
-    const mugTitles = {
-      classique: 'Mug classique',
-      'deux-couleurs': 'Tasse à deux couleurs',
-      'verre-glace': 'Tasse en verre glacé',
-      'voyage-travail': 'Tasse pour voyage/travail'
-    };
-    const magnetData = {
-      rond: {label: 'Magnet rond', size: '5,7 cm', price: '6 €'},
-      carre: {label: 'Magnet carré', size: '5,1 cm', price: '6,50 €'},
-      rectangle: {label: 'Magnet rectangle', size: '8,89 cm x 6,35 cm', price: '7 €'}
-    };
-    let currentType = 'classique';
-    let currentSize = '325';
-    let currentMagnet = 'rond';
-
-    function renderMug() {
-      document.getElementById('mugTitle').textContent = mugTitles[currentType];
-      const opts = mugPrices[currentType];
-      const sizeRow = document.getElementById('sizeRow');
-      sizeRow.innerHTML = '';
-      Object.keys(opts).forEach(size => {
-        const b = document.createElement('button');
-        b.className = 'mini-btn' + (size === currentSize ? ' active' : '');
-        b.textContent = size + ' ml';
-        b.onclick = () => { currentSize = size; renderMug(); };
-        b.dataset.size = size;
-        sizeRow.appendChild(b);
-      });
-      if (!opts[currentSize]) currentSize = Object.keys(opts)[0];
-      document.getElementById('mugPrice').textContent = opts[currentSize] + ' €';
-      document.querySelectorAll('#typeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.type === currentType));
-      document.querySelectorAll('#sizeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.size === currentSize));
+  const products = {
+    mugs: {
+      classique: { name: "Mug classique", basePrice: 19, sizes: {325: 19, 444: 20} },
+      deux_couleurs: { name: "Tasse à deux couleurs", basePrice: 20, sizes: {325: 20, 444: 23} },
+      verre_glace: { name: "Tasse en verre glacé", basePrice: 24, sizes: {296: 24, 473: 30} },
+      voyage_travail: { name: "Tasse voyage/travail", basePrice: 25, sizes: {444: 25} }
+    },
+    coussins: {
+      carre: { name: "Coussin 40,6x40,6 cm", price: 50, sizes: {unique: 50} }
+    },
+    magnets: {
+      rond: { name: "Magnet rond", price: 6, sizes: {rond: 6} },
+      carre: { name: "Magnet carré", price: 6.5, sizes: {carre: 6.5} },
+      rectangle: { name: "Magnet rectangle", price: 7, sizes: {rectangle: 7} }
     }
-    function setMugType(btn) { currentType = btn.dataset.type; currentSize = Object.keys(mugPrices[currentType])[0]; renderMug(); }
-    function renderMagnet() {
-      const d = magnetData[currentMagnet];
-      document.getElementById('magnetTitle').textContent = d.label;
-      document.getElementById('magnetPrice').textContent = d.price;
-      const sizeRow = document.getElementById('magnetSizeRow');
-      sizeRow.innerHTML = '';
-      const b = document.createElement('button');
-      b.className = 'mini-btn active';
-      b.textContent = d.size;
-      sizeRow.appendChild(b);
-      document.querySelectorAll('#magnetTypeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.magnet === currentMagnet));
-    }
-    function setMagnetType(btn) { currentMagnet = btn.dataset.magnet; renderMagnet(); }
-    renderMug();
-    renderMagnet();
+  };
 
-    function showToast(message, isError = false) {
-      const toast = document.getElementById('toastMsg');
-      toast.textContent = message;
-      toast.style.display = 'block';
-      toast.style.background = isError ? '#8b0000' : '#000';
-      toast.style.borderColor = isError ? '#ff4b2b' : 'var(--sub)';
-      toast.style.color = isError ? '#ffaa88' : 'var(--sub)';
-      setTimeout(() => { toast.style.display = 'none'; }, 4000);
-    }
+  let currentMugType = "classique";
+  let currentMugSize = "325";
+  let currentMagnetType = "rond";
 
-    function saveOrderLocally(order) {
-      let orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
-      orders.unshift(order);
-      if (orders.length > 50) orders.pop();
-      localStorage.setItem('dlm_shop_orders', JSON.stringify(orders));
-    }
+  let cart = JSON.parse(localStorage.getItem("dlm_shop_cart")) || [];
 
-    async function sendToDiscord(order) {
-      try {
-        const embed = {
-          title: "🛒 Nouvelle commande DLM-SHOP",
-          color: 0x00d2ff,
-          fields: [
-            { name: "📦 Produit", value: order.product, inline: true },
-            { name: "🔖 Variante", value: order.variant || "—", inline: true },
-            { name: "💰 Prix", value: order.price, inline: true },
-            { name: "🕒 Date", value: order.date, inline: true },
-            { name: "🆔 Ref", value: order.ref, inline: true }
-          ],
-          footer: { text: "DLM-Corp Shop" },
-          timestamp: new Date().toISOString()
-        };
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ embeds: [embed] })
-        });
-        return response.ok;
-      } catch (err) {
-        console.error(err);
-        return false;
-      }
-    }
+  function saveCart() { localStorage.setItem("dlm_shop_cart", JSON.stringify(cart)); renderCart(); }
 
-    async function processOrder(productName, variant, price, extra = {}) {
-      const now = new Date();
-      const order = {
-        ref: 'CMD-' + Date.now().toString(36).toUpperCase(),
-        product: productName,
-        variant: variant,
-        price: price,
-        date: now.toLocaleString('fr-FR', { hour12: false }),
-        timestamp: now.getTime(),
-        ...extra
-      };
-      saveOrderLocally(order);
-      const sent = await sendToDiscord(order);
-      if (sent) {
-        showToast(`✅ Commande enregistrée ! Ref: ${order.ref} (envoyée au staff)`);
-      } else {
-        showToast(`📦 Commande enregistrée localement (ref: ${order.ref})`, false);
-      }
-      console.log("Commande:", order);
+  function addToCart(category, id, variantLabel, price, details = {}) {
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({ id, category, name: variantLabel, price: price, qty: 1, details });
     }
+    saveCart();
+    showToast(`➕ Ajouté : ${variantLabel} (${price} €)`);
+  }
 
-    function commanderMug() {
-      const price = mugPrices[currentType][currentSize];
-      const variant = `${mugTitles[currentType]} · ${currentSize} ml`;
-      processOrder("Tasse / Mug", variant, `${price} €`, { type: currentType, size_ml: currentSize });
-    }
-    function commanderCoussin() {
-      processOrder("Coussin 40,6x40,6 cm", "Coussin carré 40,6 cm", "50 €", { format: "40,6x40,6 cm" });
-    }
-    function commanderMagnet() {
-      const magnet = magnetData[currentMagnet];
-      const variant = `${magnet.label} · ${magnet.size}`;
-      processOrder("Magnet", variant, magnet.price, { magnet_type: currentMagnet });
-    }
+  function updateQty(id, delta) {
+    const idx = cart.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    const newQty = cart[idx].qty + delta;
+    if (newQty <= 0) cart.splice(idx, 1);
+    else cart[idx].qty = newQty;
+    saveCart();
+  }
 
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  function removeItem(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart();
+  }
 
-    window.addEventListener('load', () => {
-      const orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
-      if (orders.length) console.log(`${orders.length} commande(s) locale(s)`);
+  function renderCart() {
+    const container = document.getElementById("cartItemsList");
+    const totalSpan = document.getElementById("cartTotal");
+    if (!container) return;
+    if (cart.length === 0) {
+      container.innerHTML = '<div class="cart-empty">Votre panier est vide</div>';
+      totalSpan.innerHTML = "Total : 0 €";
+      return;
+    }
+    let total = 0;
+    let html = "";
+    cart.forEach(item => {
+      const itemTotal = item.price * item.qty;
+      total += itemTotal;
+      html += `<div class="cart-item">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${escapeHtml(item.name)}</div>
+          <div class="cart-item-price">${item.price} € x ${item.qty}</div>
+        </div>
+        <div class="cart-item-actions">
+          <button class="cart-qty-btn" onclick="updateQty('${item.id}', -1)">-</button>
+          <span style="min-width:28px;text-align:center">${item.qty}</span>
+          <button class="cart-qty-btn" onclick="updateQty('${item.id}', 1)">+</button>
+          <button class="cart-remove" onclick="removeItem('${item.id}')">✕</button>
+        </div>
+      </div>`;
     });
-  </script>
+    container.innerHTML = html;
+    totalSpan.innerHTML = `Total : ${total.toFixed(2)} €`;
+  }
+
+  function generateUniqueId(category, type, size) {
+    return `${category}_${type}_${size}`.replace(/[^a-z0-9_]/g, '_');
+  }
+
+  function renderMugs() {
+    const container = document.getElementById("mugsGrid");
+    if (!container) return;
+    const types = [
+      { key: "classique", label: "Mug classique" },
+      { key: "deux_couleurs", label: "Tasse à deux couleurs" },
+      { key: "verre_glace", label: "Tasse en verre glacé" },
+      { key: "voyage_travail", label: "Tasse voyage/travail" }
+    ];
+    container.innerHTML = types.map(t => {
+      const prod = products.mugs[t.key];
+      const sizes = prod.sizes;
+      const sizeOptions = Object.keys(sizes).map(sz => `<button class="mini-btn ${currentMugType === t.key && currentMugSize === sz ? 'active' : ''}" data-type="${t.key}" data-size="${sz}" onclick="selectMugOption('${t.key}', '${sz}')">${sz} ml (${sizes[sz]}€)</button>`).join('');
+      const currentPrice = (currentMugType === t.key && sizes[currentMugSize]) ? sizes[currentMugSize] : Object.values(sizes)[0];
+      return `<div class="card">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EMug%3C/text%3E%3C/svg%3E" alt="Tasse">
+        <h3>${t.label}</h3>
+        <div class="selector-row">${sizeOptions}</div>
+        <div class="price">${currentPrice} €</div>
+        <button class="add-btn" onclick="addMugToCart('${t.key}')">Ajouter au panier</button>
+      </div>`;
+    }).join('');
+  }
+
+  function selectMugOption(type, size) {
+    currentMugType = type;
+    currentMugSize = size;
+    renderMugs();
+  }
+
+  function addMugToCart(type) {
+    const prod = products.mugs[type];
+    const price = prod.sizes[currentMugSize];
+    if (!price) return;
+    const variantLabel = `${prod.name} · ${currentMugSize} ml`;
+    const id = generateUniqueId('mug', type, currentMugSize);
+    addToCart('mug', id, variantLabel, price, { type, size: currentMugSize });
+  }
+
+  function renderCoussins() {
+    const container = document.getElementById("coussinsGrid");
+    if (!container) return;
+    container.innerHTML = `<div class="card">
+      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ECoussin%3C/text%3E%3C/svg%3E" alt="Coussin">
+      <h3>Coussin 40,6 cm x 40,6 cm</h3>
+      <div class="price">50 €</div>
+      <button class="add-btn" onclick="addCoussinToCart()">Ajouter au panier</button>
+    </div>`;
+  }
+
+  function addCoussinToCart() {
+    const id = generateUniqueId('coussin', 'carre', 'unique');
+    addToCart('coussin', id, "Coussin 40,6x40,6 cm", 50, {});
+  }
+
+  function renderMagnets() {
+    const container = document.getElementById("magnetsGrid");
+    if (!container) return;
+    const types = [
+      { key: "rond", label: "Magnet rond", price: 6, sizeLabel: "5,7 cm" },
+      { key: "carre", label: "Magnet carré", price: 6.5, sizeLabel: "5,1 cm" },
+      { key: "rectangle", label: "Magnet rectangle", price: 7, sizeLabel: "8,89 x 6,35 cm" }
+    ];
+    container.innerHTML = types.map(t => {
+      const activeClass = currentMagnetType === t.key ? 'active' : '';
+      return `<div class="card">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3EMagnet%3C/text%3E%3C/svg%3E" alt="Magnet">
+        <h3>${t.label}</h3>
+        <div class="selector-row"><button class="mini-btn ${activeClass}" onclick="selectMagnetType('${t.key}')">${t.sizeLabel}</button></div>
+        <div class="price">${t.price} €</div>
+        <button class="add-btn" onclick="addMagnetToCart('${t.key}')">Ajouter au panier</button>
+      </div>`;
+    }).join('');
+  }
+
+  function selectMagnetType(type) { currentMagnetType = type; renderMagnets(); }
+  function addMagnetToCart(type) {
+    const prod = products.magnets[type];
+    const price = prod.price;
+    const variantLabel = prod.name;
+    const id = generateUniqueId('magnet', type, type);
+    addToCart('magnet', id, variantLabel, price, { type });
+  }
+
+  async function sendOrderToDiscord(discordUser, items, total) {
+    const itemLines = items.map(i => `${i.name} x${i.qty} → ${(i.price * i.qty).toFixed(2)} €`).join('\n');
+    const embed = {
+      title: "🛒 NOUVELLE COMMANDE GROUPÉE",
+      color: 0x00d2ff,
+      fields: [
+        { name: "👤 Client Discord", value: discordUser, inline: false },
+        { name: "📦 Articles", value: itemLines.substring(0, 1000), inline: false },
+        { name: "💰 Total", value: `${total.toFixed(2)} €`, inline: true },
+        { name: "🕒 Date", value: new Date().toLocaleString('fr-FR'), inline: true }
+      ],
+      footer: { text: "DLM-Shop · Paiement à la livraison" },
+      timestamp: new Date().toISOString()
+    };
+    try {
+      const res = await fetch(DISCORD_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] })
+      });
+      return res.ok;
+    } catch(e) { return false; }
+  }
+
+  async function validateOrder() {
+    const discordUser = document.getElementById("discordUsername").value.trim();
+    if (!discordUser) {
+      showToast("❌ Entrez votre pseudo Discord avant de valider la commande !", true);
+      return;
+    }
+    if (cart.length === 0) {
+      showToast("🛒 Votre panier est vide !", true);
+      return;
+    }
+    const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const success = await sendOrderToDiscord(discordUser, cart, total);
+    if (success) {
+      showToast(`✅ Commande envoyée au staff ! Réf: ${Date.now().toString(36).toUpperCase()}`);
+      cart = [];
+      saveCart();
+    } else {
+      showToast("⚠️ Erreur lors de l'envoi, réessayez plus tard.", true);
+    }
+  }
+
+  function showToast(msg, isErr = false) {
+    const toast = document.getElementById("toastMsg");
+    toast.textContent = msg;
+    toast.style.display = "block";
+    toast.style.background = isErr ? "#8b0000" : "#000";
+    toast.style.borderColor = isErr ? "#ff4b2b" : "var(--sub)";
+    setTimeout(() => toast.style.display = "none", 4000);
+  }
+
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+
+  document.getElementById("validateOrderBtn").addEventListener("click", validateOrder);
+  renderMugs();
+  renderCoussins();
+  renderMagnets();
+  renderCart();
+  window.selectMugOption = selectMugOption;
+  window.addMugToCart = addMugToCart;
+  window.addCoussinToCart = addCoussinToCart;
+  window.selectMagnetType = selectMagnetType;
+  window.addMagnetToCart = addMagnetToCart;
+  window.updateQty = updateQty;
+  window.removeItem = removeItem;
+  window.showSection = showSection;
+</script>
 </body>
 </html>
