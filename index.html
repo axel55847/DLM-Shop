@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DLM-SHOP</title>
+  <title>DLM-SHOP · Commandes</title>
   <style>
     :root{--accent:#6a0dad;--sub:#00d2ff;--glow:rgba(0,210,255,.45);--bg:#020208;--line:rgba(255,255,255,.08);--text:#fff;--muted:rgba(255,255,255,.65)}
     *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top, rgba(106,13,173,.18), transparent 35%), linear-gradient(180deg,#020208 0%,#060610 100%);color:var(--text)}
@@ -24,12 +24,14 @@
     .card h3{margin:0 0 10px;font-size:1.2rem;letter-spacing:1px;text-transform:uppercase}
     .card p{color:var(--muted);line-height:1.7;margin:0 0 16px;font-size:.95rem}
     .price{font-size:1.8rem;font-weight:900;color:var(--sub);margin-bottom:16px;text-shadow:0 0 12px var(--glow)}
-    .btn{padding:12px 24px;border-radius:14px;background:var(--sub);border:none;color:#000;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;font-size:.9rem}
+    .btn{padding:12px 24px;border-radius:14px;background:var(--sub);border:none;color:#000;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;font-size:.9rem;transition:.2s}
+    .btn:hover{transform:scale(1.02);filter:brightness(1.1)}
     .selector-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}
     .mini-btn{padding:8px 12px;border-radius:999px;border:1px solid rgba(0,210,255,.35);background:rgba(255,255,255,.04);color:#fff;font-size:.75rem;font-weight:800;text-transform:uppercase;cursor:pointer}
     .mini-btn.active{background:var(--sub);color:#000;border-color:var(--sub)}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#000;color:var(--sub);border:1px solid var(--sub);padding:10px 24px;border-radius:50px;font-family:monospace;font-weight:800;font-size:.85rem;z-index:1000;display:none;backdrop-filter:blur(12px);white-space:nowrap}
     footer{padding:28px 20px 40px;text-align:center;color:rgba(255,255,255,.28);border-top:1px solid rgba(255,255,255,.05);letter-spacing:3px;text-transform:uppercase;font-size:.75rem}
-    @media (max-width:640px){h1{font-size:1.8rem;letter-spacing:3px}.grid{grid-template-columns:1fr}.card img{height:220px}.nav-grid{grid-template-columns:1fr}}
+    @media (max-width:640px){h1{font-size:1.8rem;letter-spacing:3px}.grid{grid-template-columns:1fr}.card img{height:220px}.nav-grid{grid-template-columns:1fr}.toast{white-space:normal;width:80%;text-align:center}}
   </style>
 </head>
 <body>
@@ -46,21 +48,18 @@
       <h2>Tasses</h2>
       <div class="grid">
         <article class="card">
-          <img id="mugImage" src="attachment://image.jpg" alt="Tasse" />
+          <img id="mugImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EMug%3C/text%3E%3C/svg%3E" alt="Tasse" />
           <h3 id="mugTitle">Mug classique</h3>
-          <p>Photo de présentation du produit.</p>
+          <p>Tasse personnalisable, haute qualité.</p>
           <div class="selector-row" id="typeRow">
             <button class="mini-btn active" data-type="classique" onclick="setMugType(this)">Mug classique</button>
             <button class="mini-btn" data-type="deux-couleurs" onclick="setMugType(this)">Tasse à deux couleurs</button>
             <button class="mini-btn" data-type="verre-glace" onclick="setMugType(this)">Tasse en verre glacé</button>
             <button class="mini-btn" data-type="voyage-travail" onclick="setMugType(this)">Tasse pour voyage/travail</button>
           </div>
-          <div class="selector-row" id="sizeRow">
-            <button class="mini-btn active" data-size="325" onclick="setMugSize(this)">325 ml</button>
-            <button class="mini-btn" data-size="444" onclick="setMugSize(this)">444 ml</button>
-          </div>
+          <div class="selector-row" id="sizeRow"></div>
           <div class="price" id="mugPrice">19 €</div>
-          <button class="btn">Commander</button>
+          <button class="btn" onclick="commanderMug()">Commander</button>
         </article>
       </div>
     </section>
@@ -68,7 +67,13 @@
     <section class="section" id="coussins">
       <h2>Coussins</h2>
       <div class="grid">
-        <article class="card"><img src="attachment://image.jpg" alt="Coussin 40,6 cm x 40,6 cm" /><h3>Coussin 40,6 cm x 40,6 cm</h3><p>Photo de présentation du produit.</p><div class="price">50 €</div><button class="btn">Commander</button></article>
+        <article class="card">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ECoussin%3C/text%3E%3C/svg%3E" alt="Coussin 40,6 cm x 40,6 cm" />
+          <h3>Coussin 40,6 cm x 40,6 cm</h3>
+          <p>Coussin carré moelleux, impression recto-verso.</p>
+          <div class="price">50 €</div>
+          <button class="btn" onclick="commanderCoussin()">Commander</button>
+        </article>
       </div>
     </section>
 
@@ -76,24 +81,31 @@
       <h2>Magnets</h2>
       <div class="grid">
         <article class="card">
-          <img id="magnetImage" src="attachment://image.jpg" alt="Magnet rond" />
+          <img id="magnetImage" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3EMagnet%3C/text%3E%3C/svg%3E" alt="Magnet rond" />
           <h3 id="magnetTitle">Magnet rond</h3>
-          <p>Photo de présentation du produit.</p>
+          <p>Magnétique, finition brillante.</p>
           <div class="selector-row" id="magnetTypeRow">
             <button class="mini-btn active" data-magnet="rond" onclick="setMagnetType(this)">Rond</button>
             <button class="mini-btn" data-magnet="carre" onclick="setMagnetType(this)">Carré</button>
             <button class="mini-btn" data-magnet="rectangle" onclick="setMagnetType(this)">Rectangle</button>
           </div>
-          <div class="selector-row" id="magnetSizeRow">
-            <button class="mini-btn active" data-size="rond" onclick="setMagnetSize(this)">5,7 cm</button>
-          </div>
+          <div class="selector-row" id="magnetSizeRow"></div>
           <div class="price" id="magnetPrice">6 €</div>
-          <button class="btn">Commander</button>
+          <button class="btn" onclick="commanderMagnet()">Commander</button>
         </article>
       </div>
     </section>
   </main>
+  <footer>DLM-SHOP · Commandes sécurisées</footer>
+  <div id="toastMsg" class="toast"></div>
+
   <script>
+    // ========== CONFIGURATION ==========
+    // 🔽 REMPLACEZ CETTE URL PAR VOTRE WEBHOOK DISCORD 🔽
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/TA_DISCORD_WEBHOOK_ID/TA_TOKEN";
+    // Si vous ne voulez pas utiliser Discord, commentez l'envoi et utilisez console.log / localStorage
+
+    // ========== DONNÉES PRODUITS ==========
     const mugPrices = {
       classique: {325: 19, 444: 20},
       'deux-couleurs': {325: 20, 444: 23},
@@ -107,52 +119,154 @@
       'voyage-travail': 'Tasse pour voyage/travail'
     };
     const magnetData = {
-      rond: {label: 'Magnet rond', size: '5,7 cm', price: '6 €', img: 'attachment://image.jpg'},
-      carre: {label: 'Magnet carré', size: '5,1 cm', price: '6,50 €', img: 'attachment://image.jpg'},
-      rectangle: {label: 'Magnet rectangle', size: '8,89 cm x 6,35 cm', price: '7 €', img: 'attachment://image-2.jpg'}
+      rond: {label: 'Magnet rond', size: '5,7 cm', price: '6 €'},
+      carre: {label: 'Magnet carré', size: '5,1 cm', price: '6,50 €'},
+      rectangle: {label: 'Magnet rectangle', size: '8,89 cm x 6,35 cm', price: '7 €'}
     };
-    let currentType='classique';
-    let currentSize='325';
-    let currentMagnet='rond';
-    function showSection(id){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});}
-    function renderMug(){
+    let currentType = 'classique';
+    let currentSize = '325';
+    let currentMagnet = 'rond';
+
+    // ========== RENDU DES VARIANTES ==========
+    function renderMug() {
       document.getElementById('mugTitle').textContent = mugTitles[currentType];
       const opts = mugPrices[currentType];
       const sizeRow = document.getElementById('sizeRow');
       sizeRow.innerHTML = '';
-      Object.keys(opts).forEach(size=>{
+      Object.keys(opts).forEach(size => {
         const b = document.createElement('button');
-        b.className = 'mini-btn' + (size===currentSize ? ' active' : '');
+        b.className = 'mini-btn' + (size === currentSize ? ' active' : '');
         b.textContent = size + ' ml';
         b.onclick = () => { currentSize = size; renderMug(); };
         b.dataset.size = size;
         sizeRow.appendChild(b);
       });
-      if(!opts[currentSize]) currentSize = Object.keys(opts)[0];
+      if (!opts[currentSize]) currentSize = Object.keys(opts)[0];
       document.getElementById('mugPrice').textContent = opts[currentSize] + ' €';
-      document.querySelectorAll('#typeRow .mini-btn').forEach(b=>b.classList.toggle('active', b.dataset.type===currentType));
-      document.querySelectorAll('#sizeRow .mini-btn').forEach(b=>b.classList.toggle('active', b.dataset.size===currentSize));
+      document.querySelectorAll('#typeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.type === currentType));
+      document.querySelectorAll('#sizeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.size === currentSize));
     }
-    function setMugType(btn){ currentType = btn.dataset.type; currentSize = Object.keys(mugPrices[currentType])[0]; renderMug(); }
-    function setMugSize(btn){ currentSize = btn.dataset.size; renderMug(); }
-    function renderMagnet(){
+    function setMugType(btn) { currentType = btn.dataset.type; currentSize = Object.keys(mugPrices[currentType])[0]; renderMug(); }
+    function renderMagnet() {
       const d = magnetData[currentMagnet];
       document.getElementById('magnetTitle').textContent = d.label;
       document.getElementById('magnetPrice').textContent = d.price;
-      document.getElementById('magnetImage').src = d.img;
       const sizeRow = document.getElementById('magnetSizeRow');
       sizeRow.innerHTML = '';
       const b = document.createElement('button');
       b.className = 'mini-btn active';
       b.textContent = d.size;
-      b.onclick = () => {};
       sizeRow.appendChild(b);
-      document.querySelectorAll('#magnetTypeRow .mini-btn').forEach(btn=>btn.classList.toggle('active', btn.dataset.magnet===currentMagnet));
+      document.querySelectorAll('#magnetTypeRow .mini-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.magnet === currentMagnet));
     }
-    function setMagnetType(btn){ currentMagnet = btn.dataset.magnet; renderMagnet(); }
-    function setMagnetSize(btn){}
+    function setMagnetType(btn) { currentMagnet = btn.dataset.magnet; renderMagnet(); }
     renderMug();
     renderMagnet();
+
+    // ========== FONCTIONS DE COMMANDE ==========
+    function showToast(message, isError = false) {
+      const toast = document.getElementById('toastMsg');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      toast.style.background = isError ? '#8b0000' : '#000';
+      toast.style.borderColor = isError ? '#ff4b2b' : 'var(--sub)';
+      toast.style.color = isError ? '#ffaa88' : 'var(--sub)';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+
+    // Enregistrement local (historique client)
+    function saveOrderLocally(order) {
+      let orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
+      orders.unshift(order); // récent en premier
+      if (orders.length > 50) orders.pop();
+      localStorage.setItem('dlm_shop_orders', JSON.stringify(orders));
+    }
+
+    // Envoi vers Discord (webhook)
+    async function sendToDiscord(order) {
+      if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "https://discord.com/api/webhooks/TA_DISCORD_WEBHOOK_ID/TA_TOKEN") {
+        console.warn("⚠️ Webhook Discord non configuré, commande enregistrée localement uniquement.");
+        return false;
+      }
+      try {
+        const embed = {
+          title: "🛒 Nouvelle commande DLM-SHOP",
+          color: 0x00d2ff,
+          fields: [
+            { name: "📦 Produit", value: order.product, inline: true },
+            { name: "🔖 Variante", value: order.variant || "—", inline: true },
+            { name: "💰 Prix", value: order.price, inline: true },
+            { name: "🕒 Date", value: order.date, inline: true },
+            { name: "🆔 Ref", value: order.ref, inline: true }
+          ],
+          footer: { text: "DLM-Corp Shop" },
+          timestamp: new Date().toISOString()
+        };
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ embeds: [embed] })
+        });
+        if (response.ok) return true;
+        else throw new Error(`HTTP ${response.status}`);
+      } catch (err) {
+        console.error("Erreur envoi Discord:", err);
+        return false;
+      }
+    }
+
+    // Commande générique
+    async function processOrder(productName, variant, price, extra = {}) {
+      const now = new Date();
+      const order = {
+        ref: 'CMD-' + Date.now().toString(36).toUpperCase(),
+        product: productName,
+        variant: variant,
+        price: price,
+        date: now.toLocaleString('fr-FR', { hour12: false }),
+        timestamp: now.getTime(),
+        ...extra
+      };
+      // Enregistrement local
+      saveOrderLocally(order);
+      // Envoi Discord
+      const sent = await sendToDiscord(order);
+      if (sent) {
+        showToast(`✅ Commande enregistrée ! Ref: ${order.ref} (envoyée au staff)`);
+      } else {
+        showToast(`📦 Commande enregistrée localement (ref: ${order.ref})`, false);
+      }
+      // Optionnel : afficher dans console pour débogage
+      console.log("Commande:", order);
+    }
+
+    // Commandes spécifiques
+    function commanderMug() {
+      const price = mugPrices[currentType][currentSize];
+      const variant = `${mugTitles[currentType]} · ${currentSize} ml`;
+      processOrder("Tasse / Mug", variant, `${price} €`, { type: currentType, size_ml: currentSize });
+    }
+    function commanderCoussin() {
+      processOrder("Coussin 40,6x40,6 cm", "Coussin carré 40,6 cm", "50 €", { format: "40,6x40,6 cm" });
+    }
+    function commanderMagnet() {
+      const magnet = magnetData[currentMagnet];
+      const variant = `${magnet.label} · ${magnet.size}`;
+      processOrder("Magnet", variant, magnet.price, { magnet_type: currentMagnet });
+    }
+
+    // Navigation entre sections
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Petit ajout : si la fenêtre est rechargée, afficher le nombre de commandes locales (optionnel)
+    window.addEventListener('load', () => {
+      const orders = JSON.parse(localStorage.getItem('dlm_shop_orders') || '[]');
+      if (orders.length) console.log(`📦 ${orders.length} commande(s) enregistrée(s) localement`);
+    });
   </script>
 </body>
 </html>
