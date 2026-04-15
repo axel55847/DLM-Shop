@@ -115,7 +115,7 @@
     </div>
   </div>
 </main>
-<footer>DLM-SHOP · Paiement à la livraison</footer>
+<footer>DLM-SHOP</footer>
 <div id="toastMsg" class="toast"></div>
 
 <script>
@@ -287,7 +287,7 @@
     const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
     const success = await sendOrderToDiscord(discordUser, cart, total);
     if (success) {
-      showToast(`✅Commande envoyée au staff✅ Réf: ${Date.now().toString(36).toUpperCase()}`);
+      showToast(`✅Commande envoyée au staff un admin vous contactera dans les plus bref delay✅ Réf: ${Date.now().toString(36).toUpperCase()}`);
       cart = [];
       saveCart();
     } else {
