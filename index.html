@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DLM-SHOP · Commandes</title>
+  <title>DLM-SHOP · Panier unique</title>
   <style>
     :root{--accent:#6a0dad;--sub:#00d2ff;--glow:rgba(0,210,255,.45);--bg:#020208;--line:rgba(255,255,255,.08);--text:#fff;--muted:rgba(255,255,255,.65)}
     *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top, rgba(106,13,173,.18), transparent 35%), linear-gradient(180deg,#020208 0%,#060610 100%);color:var(--text)}
@@ -27,22 +27,21 @@
     .cart-total{font-size:1.2rem;font-weight:900;text-align:right;margin:16px 0 12px;padding-top:12px;border-top:1px solid var(--line)}
     .cart-empty{text-align:center;padding:24px;color:var(--muted);font-style:italic}
     .validate-btn{background:var(--sub);color:#000;border:none;width:100%;padding:14px;border-radius:24px;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;margin-top:12px}
-    .validate-btn:disabled{opacity:.5;cursor:not-allowed}
     .nav-grid{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:14px;margin-bottom:24px}
     .nav-btn{background:var(--sub);padding:12px;border-radius:16px;font-weight:900;text-transform:uppercase;letter-spacing:2px;cursor:pointer;border:none;color:#000}
     .section{display:none}
     .section.active{display:block}
     h2{font-size:1.7rem;margin:0 0 22px;text-align:center;letter-spacing:4px;color:var(--sub)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
-    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:22px;padding:20px;text-align:center}
-    .card img{width:100%;height:200px;object-fit:contain;background:#fff;border-radius:16px;margin-bottom:16px}
-    .card h3{margin:0 0 10px;font-size:1.1rem}
-    .card p{color:var(--muted);font-size:.85rem}
-    .price{font-size:1.6rem;font-weight:900;color:var(--sub);margin:12px 0}
-    .add-btn{padding:10px 18px;background:var(--sub);border:none;border-radius:40px;font-weight:800;cursor:pointer;width:100%}
-    .selector-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
-    .mini-btn{padding:6px 12px;border-radius:40px;border:1px solid rgba(0,210,255,.4);background:rgba(255,255,255,.05);color:#fff;font-size:.7rem;cursor:pointer}
-    .mini-btn.active{background:var(--sub);color:#000}
+    .grid{display:grid;grid-template-columns:1fr;gap:18px;max-width:500px;margin:0 auto}
+    .card{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:28px;padding:24px;text-align:center}
+    .card img{width:100%;height:220px;object-fit:contain;background:#fff;border-radius:20px;margin-bottom:16px}
+    .card h3{margin:0 0 10px;font-size:1.3rem}
+    .card p{color:var(--muted);font-size:.9rem}
+    .price{font-size:2rem;font-weight:900;color:var(--sub);margin:16px 0}
+    .add-btn{padding:12px 20px;background:var(--sub);border:none;border-radius:40px;font-weight:900;font-size:1rem;cursor:pointer;width:100%}
+    .selector-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+    .mini-btn{padding:8px 16px;border-radius:40px;border:1px solid rgba(0,210,255,.5);background:rgba(255,255,255,.05);color:#fff;font-size:.8rem;cursor:pointer;transition:.2s}
+    .mini-btn.active{background:var(--sub);color:#000;border-color:var(--sub)}
     .discord-input-area{background:rgba(0,0,0,.5);border-radius:20px;padding:12px 18px;margin-bottom:20px}
     .discord-input-area label{display:block;font-size:.8rem;margin-bottom:6px;color:var(--sub)}
     .discord-input-area input{width:100%;padding:10px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.6);color:white}
@@ -54,10 +53,10 @@
 <body>
 <header><h1>DLM-Corp</h1></header>
 <main>
-  <div class="hero"><div class="eyebrow">DLM-SHOP · Panier groupé</div></div>
+  <div class="hero"><div class="eyebrow">DLM-SHOP · Choix unique par catégorie</div></div>
   <div class="discord-input-area">
-    <label>🔐 Votre pseudo Discord (obligatoire)</label>
-    <input type="text" id="discordUsername" placeholder="Ex: pierre#1234 ou pierre" autocomplete="off">
+    <label>🔐Votre pseudo Discord (obligatoire)🔐</label>
+    <input type="text" id="discordUsername" placeholder="Ex: pierre#1234 ou pierre">
   </div>
   <div class="flex-row">
     <div class="shop-section">
@@ -66,69 +65,93 @@
         <button class="nav-btn" onclick="showSection('coussins')">Coussins</button>
         <button class="nav-btn" onclick="showSection('magnets')">Magnets</button>
       </div>
+      <!-- Section MUGS :  -->
       <section class="section active" id="mugs">
-        <h2>Tasses</h2>
-        <div class="grid" id="mugsGrid"></div>
+        <h2>Tasses personnalisables</h2>
+        <div class="grid">
+          <div class="card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EMug%3C/text%3E%3C/svg%3E" alt="Tasse">
+            <h3>Mug / Tasse DLM</h3>
+            <div class="selector-row" id="mugTypeSelector"></div>
+            <div class="selector-row" id="mugSizeSelector"></div>
+            <div class="price" id="mugPriceDisplay">19 €</div>
+            <button class="add-btn" onclick="addCurrentMugToCart()">Ajouter au panier</button>
+          </div>
+        </div>
       </section>
+      <!-- Section COUSSINS -->
       <section class="section" id="coussins">
-        <h2>Coussins</h2>
-        <div class="grid" id="coussinsGrid"></div>
+        <h2>Coussin</h2>
+        <div class="grid">
+          <div class="card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ECoussin%3C/text%3E%3C/svg%3E" alt="Coussin">
+            <h3>Coussin 40,6 x 40,6 cm</h3>
+            <div class="price">50 €</div>
+            <button class="add-btn" onclick="addCoussinToCart()">Ajouter au panier</button>
+          </div>
+        </div>
       </section>
+      <!-- Section MAGNETS : -->
       <section class="section" id="magnets">
         <h2>Magnets</h2>
-        <div class="grid" id="magnetsGrid"></div>
+        <div class="grid">
+          <div class="card">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3EMagnet%3C/text%3E%3C/svg%3E" alt="Magnet">
+            <h3>Magnet DLM</h3>
+            <div class="selector-row" id="magnetTypeSelector"></div>
+            <div class="price" id="magnetPriceDisplay">6 €</div>
+            <button class="add-btn" onclick="addCurrentMagnetToCart()">Ajouter au panier</button>
+          </div>
+        </div>
       </section>
     </div>
     <div class="cart-section">
       <div class="cart-card">
-        <div class="cart-title">🛒 Mon panier</div>
+        <div class="cart-title">🛒Mon panier🛒</div>
         <div id="cartItemsList"></div>
         <div id="cartTotal" class="cart-total">Total : 0 €</div>
-        <button id="validateOrderBtn" class="validate-btn">✅ Valider la commande</button>
+        <button id="validateOrderBtn" class="validate-btn">✅Valider la commande✅</button>
       </div>
     </div>
   </div>
 </main>
-<footer>DLM-SHOP</footer>
+<footer>DLM-SHOP · Paiement à la livraison</footer>
 <div id="toastMsg" class="toast"></div>
 
 <script>
   const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR";
 
-  const products = {
-    mugs: {
-      classique: { name: "Mug classique", basePrice: 19, sizes: {325: 19, 444: 20} },
-      deux_couleurs: { name: "Tasse à deux couleurs", basePrice: 20, sizes: {325: 20, 444: 23} },
-      verre_glace: { name: "Tasse en verre glacé", basePrice: 24, sizes: {296: 24, 473: 30} },
-      voyage_travail: { name: "Tasse voyage/travail", basePrice: 25, sizes: {444: 25} }
-    },
-    coussins: {
-      carre: { name: "Coussin 40,6x40,6 cm", price: 50, sizes: {unique: 50} }
-    },
-    magnets: {
-      rond: { name: "Magnet rond", price: 6, sizes: {rond: 6} },
-      carre: { name: "Magnet carré", price: 6.5, sizes: {carre: 6.5} },
-      rectangle: { name: "Magnet rectangle", price: 7, sizes: {rectangle: 7} }
-    }
+  // Données produits
+  const mugTypes = {
+    classique: { label: "Mug classique", sizes: {325: 19, 444: 20} },
+    deux_couleurs: { label: "Tasse à deux couleurs", sizes: {325: 20, 444: 23} },
+    verre_glace: { label: "Tasse en verre glacé", sizes: {296: 24, 473: 30} },
+    voyage_travail: { label: "Tasse voyage/travail", sizes: {444: 25} }
+  };
+  const magnetTypes = {
+    rond: { label: "Magnet rond", price: 6, sizeLabel: "5,7 cm" },
+    carre: { label: "Magnet carré", price: 6.5, sizeLabel: "5,1 cm" },
+    rectangle: { label: "Magnet rectangle", price: 7, sizeLabel: "8,89 x 6,35 cm" }
   };
 
-  let currentMugType = "classique";
+  let currentMugTypeKey = "classique";
   let currentMugSize = "325";
-  let currentMagnetType = "rond";
+  let currentMagnetKey = "rond";
 
   let cart = JSON.parse(localStorage.getItem("dlm_shop_cart")) || [];
 
   function saveCart() { localStorage.setItem("dlm_shop_cart", JSON.stringify(cart)); renderCart(); }
 
-  function addToCart(category, id, variantLabel, price, details = {}) {
-    const existing = cart.find(item => item.id === id);
+  function addToCart(name, price, details = {}) {
+    const id = `${name.replace(/\s/g, '_')}_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`;
+    const existing = cart.find(item => item.name === name && JSON.stringify(item.details) === JSON.stringify(details));
     if (existing) {
       existing.qty += 1;
     } else {
-      cart.push({ id, category, name: variantLabel, price: price, qty: 1, details });
+      cart.push({ id, name, price, qty: 1, details });
     }
     saveCart();
-    showToast(`➕ Ajouté : ${variantLabel} (${price} €)`);
+    showToast(`➕ Ajouté : ${name} (${price} €)`);
   }
 
   function updateQty(id, delta) {
@@ -176,98 +199,61 @@
     totalSpan.innerHTML = `Total : ${total.toFixed(2)} €`;
   }
 
-  function generateUniqueId(category, type, size) {
-    return `${category}_${type}_${size}`.replace(/[^a-z0-9_]/g, '_');
+  function renderMugOptions() {
+    const typeContainer = document.getElementById("mugTypeSelector");
+    const sizeContainer = document.getElementById("mugSizeSelector");
+    if (!typeContainer) return;
+    // Boutons types
+    typeContainer.innerHTML = Object.keys(mugTypes).map(key => `
+      <button class="mini-btn ${currentMugTypeKey === key ? 'active' : ''}" data-type="${key}" onclick="selectMugType('${key}')">${mugTypes[key].label}</button>
+    `).join('');
+    updateMugSizes();
   }
 
-  function renderMugs() {
-    const container = document.getElementById("mugsGrid");
+  function updateMugSizes() {
+    const sizeContainer = document.getElementById("mugSizeSelector");
+    const sizes = mugTypes[currentMugTypeKey].sizes;
+    if (!Object.keys(sizes).includes(currentMugSize)) currentMugSize = Object.keys(sizes)[0];
+    sizeContainer.innerHTML = Object.keys(sizes).map(size => `
+      <button class="mini-btn ${currentMugSize === size ? 'active' : ''}" data-size="${size}" onclick="selectMugSize('${size}')">${size} ml (${sizes[size]} €)</button>
+    `).join('');
+    document.getElementById("mugPriceDisplay").innerText = sizes[currentMugSize] + " €";
+  }
+
+  function selectMugType(type) { currentMugTypeKey = type; renderMugOptions(); }
+  function selectMugSize(size) { currentMugSize = size; updateMugSizes(); }
+
+  function addCurrentMugToCart() {
+    const typeData = mugTypes[currentMugTypeKey];
+    const price = typeData.sizes[currentMugSize];
+    const name = `${typeData.label} · ${currentMugSize} ml`;
+    addToCart(name, price, { type: currentMugTypeKey, size: currentMugSize });
+  }
+
+  function renderMagnetOptions() {
+    const container = document.getElementById("magnetTypeSelector");
     if (!container) return;
-    const types = [
-      { key: "classique", label: "Mug classique" },
-      { key: "deux_couleurs", label: "Tasse à deux couleurs" },
-      { key: "verre_glace", label: "Tasse en verre glacé" },
-      { key: "voyage_travail", label: "Tasse voyage/travail" }
-    ];
-    container.innerHTML = types.map(t => {
-      const prod = products.mugs[t.key];
-      const sizes = prod.sizes;
-      const sizeOptions = Object.keys(sizes).map(sz => `<button class="mini-btn ${currentMugType === t.key && currentMugSize === sz ? 'active' : ''}" data-type="${t.key}" data-size="${sz}" onclick="selectMugOption('${t.key}', '${sz}')">${sz} ml (${sizes[sz]}€)</button>`).join('');
-      const currentPrice = (currentMugType === t.key && sizes[currentMugSize]) ? sizes[currentMugSize] : Object.values(sizes)[0];
-      return `<div class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dy='.3em'%3EMug%3C/text%3E%3C/svg%3E" alt="Tasse">
-        <h3>${t.label}</h3>
-        <div class="selector-row">${sizeOptions}</div>
-        <div class="price">${currentPrice} €</div>
-        <button class="add-btn" onclick="addMugToCart('${t.key}')">Ajouter au panier</button>
-      </div>`;
-    }).join('');
+    container.innerHTML = Object.keys(magnetTypes).map(key => `
+      <button class="mini-btn ${currentMagnetKey === key ? 'active' : ''}" data-magnet="${key}" onclick="selectMagnetType('${key}')">${magnetTypes[key].label} (${magnetTypes[key].sizeLabel})</button>
+    `).join('');
+    document.getElementById("magnetPriceDisplay").innerText = magnetTypes[currentMagnetKey].price + " €";
   }
 
-  function selectMugOption(type, size) {
-    currentMugType = type;
-    currentMugSize = size;
-    renderMugs();
-  }
+  function selectMagnetType(type) { currentMagnetKey = type; renderMagnetOptions(); }
 
-  function addMugToCart(type) {
-    const prod = products.mugs[type];
-    const price = prod.sizes[currentMugSize];
-    if (!price) return;
-    const variantLabel = `${prod.name} · ${currentMugSize} ml`;
-    const id = generateUniqueId('mug', type, currentMugSize);
-    addToCart('mug', id, variantLabel, price, { type, size: currentMugSize });
-  }
-
-  function renderCoussins() {
-    const container = document.getElementById("coussinsGrid");
-    if (!container) return;
-    container.innerHTML = `<div class="card">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3ECoussin%3C/text%3E%3C/svg%3E" alt="Coussin">
-      <h3>Coussin 40,6 cm x 40,6 cm</h3>
-      <div class="price">50 €</div>
-      <button class="add-btn" onclick="addCoussinToCart()">Ajouter au panier</button>
-    </div>`;
+  function addCurrentMagnetToCart() {
+    const magnet = magnetTypes[currentMagnetKey];
+    addToCart(magnet.label, magnet.price, { type: currentMagnetKey });
   }
 
   function addCoussinToCart() {
-    const id = generateUniqueId('coussin', 'carre', 'unique');
-    addToCart('coussin', id, "Coussin 40,6x40,6 cm", 50, {});
-  }
-
-  function renderMagnets() {
-    const container = document.getElementById("magnetsGrid");
-    if (!container) return;
-    const types = [
-      { key: "rond", label: "Magnet rond", price: 6, sizeLabel: "5,7 cm" },
-      { key: "carre", label: "Magnet carré", price: 6.5, sizeLabel: "5,1 cm" },
-      { key: "rectangle", label: "Magnet rectangle", price: 7, sizeLabel: "8,89 x 6,35 cm" }
-    ];
-    container.innerHTML = types.map(t => {
-      const activeClass = currentMagnetType === t.key ? 'active' : '';
-      return `<div class="card">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23333'/%3E%3Ctext x='50%25' y='50%25' font-size='16' fill='white' text-anchor='middle' dy='.3em'%3EMagnet%3C/text%3E%3C/svg%3E" alt="Magnet">
-        <h3>${t.label}</h3>
-        <div class="selector-row"><button class="mini-btn ${activeClass}" onclick="selectMagnetType('${t.key}')">${t.sizeLabel}</button></div>
-        <div class="price">${t.price} €</div>
-        <button class="add-btn" onclick="addMagnetToCart('${t.key}')">Ajouter au panier</button>
-      </div>`;
-    }).join('');
-  }
-
-  function selectMagnetType(type) { currentMagnetType = type; renderMagnets(); }
-  function addMagnetToCart(type) {
-    const prod = products.magnets[type];
-    const price = prod.price;
-    const variantLabel = prod.name;
-    const id = generateUniqueId('magnet', type, type);
-    addToCart('magnet', id, variantLabel, price, { type });
+    addToCart("Coussin 40,6x40,6 cm", 50, {});
   }
 
   async function sendOrderToDiscord(discordUser, items, total) {
     const itemLines = items.map(i => `${i.name} x${i.qty} → ${(i.price * i.qty).toFixed(2)} €`).join('\n');
     const embed = {
-      title: "🛒 NOUVELLE COMMANDE GROUPÉE",
+      title: "🛒NOUVELLE COMMANDE🛒",
       color: 0x00d2ff,
       fields: [
         { name: "👤 Client Discord", value: discordUser, inline: false },
@@ -291,21 +277,21 @@
   async function validateOrder() {
     const discordUser = document.getElementById("discordUsername").value.trim();
     if (!discordUser) {
-      showToast("❌ Entrez votre pseudo Discord avant de valider la commande !", true);
+      showToast("❌ Entrez votre pseudo Discord avant de valider !", true);
       return;
     }
     if (cart.length === 0) {
-      showToast("🛒 Votre panier est vide !", true);
+      showToast("🛒Panier vide🛒", true);
       return;
     }
-    const total = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
+    const total = cart.reduce((s, i) => s + (i.price * i.qty), 0);
     const success = await sendOrderToDiscord(discordUser, cart, total);
     if (success) {
-      showToast(`✅ Commande envoyée au staff ! Réf: ${Date.now().toString(36).toUpperCase()}`);
+      showToast(`✅Commande envoyée au staff✅ Réf: ${Date.now().toString(36).toUpperCase()}`);
       cart = [];
       saveCart();
     } else {
-      showToast("⚠️ Erreur lors de l'envoi, réessayez plus tard.", true);
+      showToast("⚠️Erreur d'envoi, réessayez⚠️", true);
     }
   }
 
@@ -325,16 +311,17 @@
     document.getElementById(id).classList.add('active');
   }
 
-  document.getElementById("validateOrderBtn").addEventListener("click", validateOrder);
-  renderMugs();
-  renderCoussins();
-  renderMagnets();
+  // Initialisation
+  renderMugOptions();
+  renderMagnetOptions();
   renderCart();
-  window.selectMugOption = selectMugOption;
-  window.addMugToCart = addMugToCart;
-  window.addCoussinToCart = addCoussinToCart;
+  document.getElementById("validateOrderBtn").addEventListener("click", validateOrder);
+  window.selectMugType = selectMugType;
+  window.selectMugSize = selectMugSize;
+  window.addCurrentMugToCart = addCurrentMugToCart;
   window.selectMagnetType = selectMagnetType;
-  window.addMagnetToCart = addMagnetToCart;
+  window.addCurrentMagnetToCart = addCurrentMagnetToCart;
+  window.addCoussinToCart = addCoussinToCart;
   window.updateQty = updateQty;
   window.removeItem = removeItem;
   window.showSection = showSection;
