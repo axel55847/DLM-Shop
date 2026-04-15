@@ -100,7 +100,7 @@
   <div id="toastMsg" class="toast"></div>
 
   <script>
-    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/TA_DISCORD_WEBHOOK_ID/TA_TOKEN";
+    const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR";
 
     const mugPrices = {
       classique: {325: 19, 444: 20},
@@ -176,10 +176,6 @@
     }
 
     async function sendToDiscord(order) {
-      if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "https://discord.com/api/webhooks/1494020560416407712/GWjYJEPRI69B13v1NHwO9eZwqAtJWDhip1pV-4COINRRYhFtgFtv-9yhZ5DJNUu3s_LR") {
-        console.warn("Webhook Discord non configuré");
-        return false;
-      }
       try {
         const embed = {
           title: "🛒 Nouvelle commande DLM-SHOP",
